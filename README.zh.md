@@ -1,46 +1,25 @@
-# dsh-plugin-subscriptions
+# DSH 插件订阅
 
-[English](README.md) | 中文
+DeepSeek Harness 的 AI LLM 插件，通过 OAuth 登录消费级 AI 订阅并将其作为 LLM 提供商暴露。
 
-把你的 **ChatGPT(Codex)**、**Claude**、**Grok(X Premium)** 订阅当作 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的 LLM provider 使用 —— 不需要 API key。Codex 和 Grok 通过 dsh web 界面 OAuth 登录(设置 → 订阅);Claude 直接从已有的 Claude Code 会话导入凭据(macOS Keychain 或 `~/.claude/.credentials.json`)。Token 保存在 `~/.dsh/plugins/subscriptions/auth.json`(权限 0600),过期自动刷新。
+## 功能
 
-## 演示
+- 所有提供商的 OAuth 认证 — 无需 API key
+- 直接从订阅解析 Composer 模型
+- 支持流式、工具调用和图片输入（取决于提供商）
+- 订阅用量状态显示在订阅设置中
+- 每个提供商内置模型目录，可在配置中覆盖
 
-设置 → **订阅**:每个 provider 的登录/退出,无需 API key。Claude 从 Claude Code 导入凭据;Codex 和 Grok 使用 OAuth(截图中账号已打码):
-
-![订阅设置页](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/subscriptions.png)
-
-已登录的 provider 会带着实时模型目录进入会话模型选择器:
-
-![模型选择器中的订阅模型](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/model-picker.png)
-
-声明了推理等级的模型会在同一菜单里多出**推理等级**选择 —— Codex 系列模型,以及 Grok 4.6 / 4.5(档位和默认值来自各 provider 的实时目录,不是硬编码列表):
-
-![推理等级选择器](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/model-effort.png)
-
-目录声明了 fast tier(即 codex CLI 的 fast 模式)的 Codex 模型,会在输入框工具行(模型选择器旁)多出一个**速度**开关 —— 标准 / 快速(`service_tier: priority`),按会话生效。`/fast` 斜杠命令提供同样的弹窗选择;当前模型不支持快速档时会提示原因。
-
-![速度开关及其标准/快速菜单](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/speed-toggle.png)
-
-`image_generate` 工具生成的图片直接内联显示在对话里:
-
-![image_generate 内联显示生成的图片](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/image-generate-inline.png)
-
-`provider` 参数可选择生图后端——同一条提示词分别走 GPT(`gpt-image-2`,上)和 Grok(`grok-imagine-image-2.0`,下):
-
-![image_generate 的 provider 参数对比 gpt 与 grok](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/image-generate-providers.png)
-
-`video_generate` 工具生成的视频直接内联播放:
-
-![video_generate 内联播放生成的视频](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/video-generate-inline.png)
-
-## Provider 一览
+## 提供商一览
 
 | 路由     | 订阅             | 模型 |
 |----------|------------------|------|
 | `codex`  | ChatGPT Plus/Pro | 从 `chatgpt.com/backend-api/codex/models` 实时获取 |
 | `claude` | Claude Pro/Max   | 订阅内所有可用模型(Opus、Sonnet、Haiku、Fable —— 静态目录,随插件更新) |
 | `grok`   | X Premium (xAI)  | 从 `api.x.ai/v1/models` 实时获取(仅对话模型);推理等级来自 Grok CLI 目录(`cli-chat-proxy.grok.com/v1/models`) |
+| `antigravity` | Google One AI Premium / Antigravity | 静态目录:Gemini 3 Pro / 3.1 Pro / 3 Flash,以及 Claude 4.6 Sonnet / 4.6 Opus(经 Antigravity 后端);需设置 `ANTIGRAVITY_CLIENT_ID` 和 `ANTIGRAVITY_CLIENT_SECRET` 环境变量 |
+| `openrouter` | OpenRouter (OAuth PKCE) | 静态目录:GPT-4o / GPT-4o Mini / Claude Sonnet 4.5 / Claude Haiku 4.5 / Gemini 2.5 Flash;通过 OpenRouter 的 OAuth PKCE 登录交换为用户控制的 API key |
+| `agnes` | Agnes AI (OAuth) | 静态目录:Agnes 2.5 Flash / 2.0 Flash,以及 GPT-4o / Claude Sonnet 4.5(经 AgnesCode OAuth);浏览器授权后手动粘贴回调 URL |
 
 只有已登录的 provider 才会出现在会话模型选择器里;登录/退出后列表自动刷新。支持视觉的模型会声明 `['text', 'image']` 输入模态,图片内容会被翻译成各 provider 的 wire 格式。
 
@@ -63,83 +42,55 @@ dsh plugin --profile web add dsh-plugin-subscriptions
 也可以从 GitHub 安装源码:
 
 ```sh
-dsh plugin --profile web add github:V1ki/dsh-plugin-subscriptions
+dsh plugin --profile web add github:randomix777/dsh-plugin-subscriptions
 ```
 
-首次安装 pnpm 会要求允许该包的构建脚本(git 安装拉取的是源码而非构建产物);把打印出的包名加进 profile 的 `pnpm-workspace.yaml`:
-
-```yaml
-allowBuilds:
-  dsh-plugin-subscriptions: true
-```
-
-然后重新执行 `add`。该授权会在安装时执行包的代码,只授给你信任的来源。
-
-本地检出安装:
-
-```sh
-git clone https://github.com/V1ki/dsh-plugin-subscriptions.git
-cd dsh-plugin-subscriptions && pnpm install && pnpm build
-dsh plugin --profile web add ./dsh-plugin-subscriptions
-```
-
-不装进 profile 的 headless 用法(先在 web 界面登录过 —— token 文件是共享的):
-
-```sh
-cp overlay.example.yml overlay.yml   # 然后把 name: 改成本检出的 lib/index.js 绝对路径
-dsh --profile headless --patch <检出目录>/overlay.yml "你的任务"
-```
-
-## 更新
-
-npm 安装的:
-
-```sh
-dsh plugin --profile web update --latest dsh-plugin-subscriptions
-```
-
-GitHub 安装的:重新执行一遍 `add github:V1ki/dsh-plugin-subscriptions` —— 会重新拉取源码并构建。link 的本地检出只需在检出目录里 `git pull && pnpm build`。
-
-无论哪种方式,更新后都要重启 `dsh web` 才会加载新版本。
-
-## 使用
+## 使用步骤
 
 1. `dsh web`,打开打印的 URL。
-2. **设置 → 订阅**:点对应 provider 的「连接」。Claude 会即时从 Claude Code 导入凭据(需先运行过 `claude` 并登录)。Codex 和 Grok 在打开的标签页里授权;无浏览器环境下可展开手动兜底,粘贴回调 URL 或授权码。
-3. 在任意会话里打开模型选择器(`/model`),选择 **ChatGPT (Codex)** / **Claude (Subscription)** / **Grok (Subscription)** 下的模型。
+2. **设置 → 订阅**:点对应 provider 的「连接」。Claude 会即时从 Claude Code 导入凭据(需先运行过 `claude` 并登录)。Codex、Grok 在打开的标签页里授权;Antigravity 需先设置 `ANTIGRAVITY_CLIENT_ID` 和 `ANTIGRAVITY_CLIENT_SECRET` 环境变量后在标签页中授权;OpenRouter 和 Agnes AI 同样在标签页中授权;无浏览器环境下可展开手动兜底,粘贴回调 URL 或授权码。
+3. 在任意会话里打开模型选择器(`/model`),选择 **ChatGPT (Codex)** / **Claude (Subscription)** / **Grok (Subscription)** / **Google Antigravity** / **OpenRouter (Subscription)** / **Agnes AI (Subscription)** 下的模型。
 
 未登录时:该 provider 不出现在选择器里;直接请求会报 `MISSING_CREDENTIAL` 并提示去设置页登录,不影响其他功能。
 
 ## 配置
 
 ```yaml
-- id: llm-subscriptions
-  name: dsh-plugin-subscriptions
-  config:
-    providers: [codex, claude]        # 子集;默认三个全启用
-    streamIdleTimeoutMs: 300000
-    models:                            # 覆盖实时发现/内置目录
-      codex:
-        - { id: gpt-5.6-sol, name: GPT-5.6 Sol, contextWindow: 272000, inputModalities: [text, image] }
+providers:
+  - id: llm-subscriptions
+    name: dsh-plugin-subscriptions
+    config:
+      providers: [codex, claude, grok, antigravity, openrouter, agnes]   # 子集;默认六个全启用
+      streamIdleTimeoutMs: 300000
+      models:                            # 覆盖实时发现/内置目录
+        codex:
+          - { id: gpt-5.6-sol, name: GPT-5.6 Sol, contextWindow: 272000, inputModalities: [text, image] }
 ```
 
-## 开发
+### Antigravity 环境变量
 
-```sh
-pnpm install   # devDependencies 用 link: 指向本地 deepseek-harness 检出 —— 先改成你的路径
-pnpm build     # tsc(lib/)+ tsdown(lib/client.js 浏览器 bundle)
-pnpm test      # 编译后跑 node --test 单测
+启动 DSH 前需设置:
+```bash
+export ANTIGRAVITY_CLIENT_ID="your-google-oauth-client-id"
+export ANTIGRAVITY_CLIENT_SECRET="your-google-oauth-client-secret"
 ```
 
-`prepare`(git 安装时触发)执行 `tsdown.prepare.config.ts`:自包含打包两个面,所有 `@deepseek-ai/*` 依赖外部化 —— 运行时从 dsh 安装解析,保证不会引入第二份 cordis。
+## 限制与已知问题
 
-改了代码后 `pnpm build` 并重启 `dsh web` 生效。
+- 各 provider 的可用性取决于你的订阅状态;未登录时该 provider 不可用
+- 图片生成依赖 `image_generate` 工具,需要 Codex 或 Grok 已登录
+- X 搜索依赖 `x_search` 工具,需要 Grok 已登录且订阅包含 API 访问权限
+- Antigravity 的 Google OAuth 凭据需要通过环境变量提供(出于安全考虑未硬编码)
+- OpenRouter 登录后获得永久 API key,无需刷新
+- Agnes AI 的回调协议 `agnes://` 无法被 DSH 自动捕获,需手动粘贴回调 URL 或授权码
 
-## 目录结构
+## 项目结构
 
-- `src/index.ts` —— 插件入口:配置 schema、adapter 注册、登录态变更通告、RPC 接线
-- `src/auth/` —— PKCE/JWT 工具、token 存储、OAuth 流程引擎(临时本地回调服务)、Claude Code 凭据读取器(Keychain/文件)、`/subscriptions-auth` RPC 通道
-- `src/providers/` —— 各 provider 的 OAuth 常量/换发/刷新 + `LlmAdapter` 实现
-- `src/translate/` —— dsh `Message[]` 与 OpenAI Responses / Anthropic Messages 格式互转,SSE → `StreamChunk`
-- `src/tools/` —— `x_search`、`image_generate` 与 `video_generate`
-- `src/client/` —— 设置 → 订阅页面(浏览器面,中英文,跟随明暗主题)
+- `lib/index.js` — 主 bundle(编译产物),所有后端逻辑
+- `lib/client.js` — 浏览器 bundle,UI 组件
+- `lib/providers/` — 各 provider 的子模块(仅供参考,实际代码在 bundle 中)
+- `src/providers/` -- 各 provider 的 OAuth 流程/交换/适配器 + `LlmAdapter` 实现
+
+## License
+
+MIT

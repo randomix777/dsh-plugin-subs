@@ -5,45 +5,43 @@
 | 字段 | 值 |
 |------|-----|
 | 插件名称 | dsh-plugin-subscriptions |
-| 版本 | 1.0.0 |
+| 版本 | 1.1.2 |
 | 仓库地址 | https://github.com/randomix777/dsh-plugin-subscriptions |
-| 描述 | DSH plugin with 18 OAuth AI providers |
+| 描述 | DSH plugin with OAuth AI providers (Claude, Codex, Grok, Antigravity, OpenRouter, Agnes AI) |
 
-## 提供商列表 (18 个)
+## 提供商列表
 
-### 免费推荐
-- gemini - Google AI Studio (60 请求/分钟)
-- openrouter - 聚合平台 (有免费模型)
-- mistral - Mistral AI (有限免费)
+### 已上线 (live)
 
-### 编程助手
-- claude - Anthropic (/月)
-- codex - OpenAI (/月)
-- cursor - Cursor (/月)
-- github-copilot - GitHub (/月)
-- windsurf - Codeium (Free/Pro)
-- cohere - Cohere (Free tier)
+- **claude** - Anthropic (Claude Code 凭据导入)
+- **codex** - OpenAI (ChatGPT Plus/Pro)
+- **grok** - xAI (X Premium)
+- **antigravity** - Google (One AI Premium / Antigravity, 需环境变量)
+- **openrouter** - OpenRouter (OAuth PKCE → API key)
+- **agnes** - Agnes AI (OAuth PKCE → access token)
 
-### 图像生成
-- agnes - Agnes AI
-- fal - fal.ai
-- replicate - Replicate
-- octoai - OctoAI
+### 即将推出 (coming soon)
 
-### 搜索/推理
-- perplexity - Perplexity AI
-- grok - xAI (/月)
-- huggingface - Hugging Face (/月)
-- lepton - Lepton AI
-- voyage - Voyage AI
+- gemini, perplexity, github-copilot, mistral, cursor, huggingface, windsurf, replicate, fal, cohere, voyage, lepton, octoai
 
 ## 安装方式
 
-`
+```
 DSH Settings > Plugins > Install from GitHub
 输入: https://github.com/randomix777/dsh-plugin-subscriptions
-`
+```
 
 ## 认证方式
 
-所有提供商均使用 OAuth 登录，无需 API Key。
+- Claude: 从已有的 Claude Code 会话导入凭据(Keychain 或 `~/.claude/.credentials.json`)
+- Codex / Grok / Antigravity: OAuth 登录(设置 → 订阅),无需 API Key
+- OpenRouter: OAuth PKCE 登录(设置 → 订阅),交换为 API key
+- Agnes AI: OAuth 登录(设置 → 订阅),浏览器授权后手动粘贴回调 URL
+
+## 环境变量 (Antigravity)
+
+启动 DSH 前需设置:
+```bash
+export ANTIGRAVITY_CLIENT_ID="your-google-oauth-client-id"
+export ANTIGRAVITY_CLIENT_SECRET="your-google-oauth-client-secret"
+```
