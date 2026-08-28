@@ -2,6 +2,12 @@
     "version":  "1.1.2",
     "name":  "dsh-plugin-subscriptions",
     "dsh":  {
+                "bundle":  {
+                                "patch":  "./cordis.patch.yml"
+                            },
+                "client":  {
+                                "platform":  "web"
+                            },
                 "id":  "llm-subscriptions",
                 "changelog":  {
                                   "1.0.0":  "Initial release with Claude, Codex, Grok",
