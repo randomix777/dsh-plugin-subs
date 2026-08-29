@@ -2,14 +2,6 @@
 
 AI LLM plugin for DeepSeek Harness that signs in to consumer AI subscriptions with OAuth and exposes them as LLM providers.
 
-## Features
-
-- OAuth sign-in for subscription providers — no API keys required
-- Composer model resolution straight from your subscription
-- Streaming, tool calling, and image input where the provider supports them
-- Usage status shown in the Subscriptions settings section
-- Built-in model catalogs per provider, overridable in config
-
 ## Providers
 
 ### Live
@@ -26,6 +18,14 @@ AI LLM plugin for DeepSeek Harness that signs in to consumer AI subscriptions wi
 ### Coming soon
 
 Gemini, Perplexity AI, GitHub Copilot, Mistral AI, Cursor, Hugging Face, Windsurf, Replicate, fal.ai, Cohere, Voyage AI, Lepton AI, OctoAI.
+
+## Features
+
+- OAuth sign-in for subscription providers — no API keys required
+- Composer model resolution straight from your subscription
+- Streaming, tool calling, and image input where the provider supports them
+- Usage status shown in the Subscriptions settings section
+- Built-in model catalogs per provider, overridable in config
 
 ## Installation
 
