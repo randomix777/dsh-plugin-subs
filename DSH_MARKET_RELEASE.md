@@ -16,7 +16,7 @@
 - **claude** - Anthropic (Claude Code 凭据导入)
 - **codex** - OpenAI (ChatGPT Plus/Pro)
 - **grok** - xAI (X Premium)
-- **antigravity** - Google (One AI Premium / Antigravity, 需环境变量)
+- **antigravity** - Google (One AI Premium / Antigravity, 内嵌凭据直接 OAuth)
 - **openrouter** - OpenRouter (OAuth PKCE → API key)
 - **agnes** - Agnes AI (OAuth PKCE → access token)
 
@@ -38,9 +38,9 @@ DSH Settings > Plugins > Install from GitHub
 - OpenRouter: OAuth PKCE 登录(设置 → 订阅),交换为 API key
 - Agnes AI: OAuth 登录(设置 → 订阅),浏览器授权后手动粘贴回调 URL
 
-## 环境变量 (Antigravity)
+## 环境变量 (可选覆盖)
 
-启动 DSH 前需设置:
+Antigravity 使用内嵌的公开凭据，无需手动设置。如需自定义 OAuth 应用，可覆盖：
 ```bash
 export ANTIGRAVITY_CLIENT_ID="your-google-oauth-client-id"
 export ANTIGRAVITY_CLIENT_SECRET="your-google-oauth-client-secret"

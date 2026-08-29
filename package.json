@@ -15,9 +15,10 @@
             "1.1.1": "Add OpenRouter provider (OAuth PKCE to API key)",
             "1.1.2": "Add Agnes AI provider (reverse-engineered OAuth from AgnesCode)",
             "1.1.3": "README cleanup and topic expansion",
-            "1.2.0": "Add GLM (Zhipu), Spark (iFlytek), ERNIE (Baidu) providers with OAuth PKCE"
+            "1.2.0": "Add GLM (Zhipu), Spark (iFlytek), ERNIE (Baidu) providers with OAuth PKCE",
+            "1.2.1": "Remove GLM; add Qwen Code provider with device-flow OAuth (chat.qwen.ai, zero config)"
         },
-        "version": "1.2.0",
+    "version": "1.2.1",
         "author": "DSH Community",
         "name": "dsh-plugin-subscriptions",
         "keywords": [
@@ -29,7 +30,8 @@
             "grok",
             "antigravity",
             "openrouter",
-            "agnes"
+            "agnes",
+            "qwen"
         ],
         "categories": [
             "ai",
@@ -40,7 +42,7 @@
         },
         "license": "MIT"
     },
-    "description": "DSH plugin: OAuth sign-in for Claude, Codex, Grok, Antigravity, OpenRouter, Agnes AI, GLM, Spark, ERNIE \u2014 expose subscription LLMs as DeepSeek Harness providers",
+    "description": "DSH plugin: OAuth sign-in for Claude, Codex, Grok, Antigravity, OpenRouter, Agnes AI, Qwen, Spark, ERNIE — expose subscription LLMs as DeepSeek Harness providers",
     "scripts": {
         "build": "echo 'Build complete'"
     },

@@ -16,7 +16,7 @@
 1. **claude** - Anthropic (Claude Code 凭据导入)
 2. **codex** - OpenAI (ChatGPT Plus/Pro)
 3. **grok** - xAI (X Premium)
-4. **antigravity** - Google (One AI Premium / Antigravity, 需环境变量)
+4. **antigravity** - Google (One AI Premium / Antigravity, 内嵌凭据直接 OAuth)
 5. **openrouter** - OpenRouter (OAuth PKCE → API key)
 6. **agnes** - Agnes AI (OAuth PKCE → access token)
 
@@ -50,6 +50,6 @@ gh release create v1.1.2 --title "v1.1.2 - Add OpenRouter & Agnes AI" --notes "S
 
 - Claude: 从已有的 Claude Code 会话导入凭据(Keychain 或 `~/.claude/.credentials.json`)
 - Codex / Grok: OAuth 登录(设置 → 订阅),无需 API Key
-- Antigravity: OAuth 登录,需设置 `ANTIGRAVITY_CLIENT_ID` 和 `ANTIGRAVITY_CLIENT_SECRET` 环境变量
+- Antigravity: OAuth 登录（内嵌公开凭据，无需配置；可选通过 `ANTIGRAVITY_CLIENT_ID` / `ANTIGRAVITY_CLIENT_SECRET` 环境变量覆盖）
 - OpenRouter: OAuth PKCE 登录(设置 → 订阅),交换为 API key
 - Agnes AI: OAuth 登录(设置 → 订阅),浏览器授权后手动粘贴回调 URL

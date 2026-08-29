@@ -19,10 +19,10 @@ DeepSeek Harness 的 AI LLM 插件，通过 OAuth 登录订阅制 LLM 提供商�
 | `claude` | Claude Pro/Max | 从 Claude Code 自动导入凭据；先运行 `claude` 登录 |
 | `codex` | ChatGPT Plus/Pro | 实时获取模型列表（`chatgpt.com/backend-api/codex/models`） |
 | `grok` | X Premium/Premium+ | 实时获取模型列表；含 `x_search`、`image_generate`、`video_generate` 工具 |
-| `antigravity` | Google One AI Premium / Antigravity | 静态目录（Gemini 3 Pro / 3.1 Pro / 3 Flash、Claude 4.6 Sonnet / Opus）；需设置环境变量 |
+| `antigravity` | Google One AI Premium / Antigravity | 静态目录（Gemini 3 Pro / 3.1 Pro / 3 Flash、Claude 4.6 Sonnet / Opus）；直接 OAuth，无需环境变量 |
 | `openrouter` | OpenRouter (OAuth PKCE) | 登录换取永久 API key；静态目录（GPT-4o / GPT-4o Mini / Claude Sonnet & Haiku 4.5 / Gemini 2.5 Flash） |
 | `agnes` | Agnes AI (OAuth) | OAuth PKCE 换取 access token（逆向自 AgnesCode）；静态目录（Agnes 2.5/2.0 Flash、GPT-4o、Claude Sonnet 4.5 via AgnesCode） |
-| `glm` | 智谱 GLM | OAuth PKCE via `open.bigmodel.cn`；需设置 `GLM_CLIENT_ID` / `GLM_CLIENT_SECRET` |
+| `qwen` | 通义千问 Qwen Coding Plan | Device-flow OAuth via `chat.qwen.ai`；无需 API Key，点击连接即完成授权 |
 | `spark` | 讯飞星火 | OAuth PKCE via `spark-api.xf-yun.com`；需设置 `SPARK_CLIENT_ID` / `SPARK_CLIENT_SECRET` |
 | `ernie` | 百度文心一言 | OAuth PKCE via `openapi.baidu.com`；需设置 `ERNIE_CLIENT_ID` / `ERNIE_CLIENT_SECRET` |
 
@@ -46,24 +46,22 @@ dsh plugin --profile web add github:randomix777/dsh-plugin-subscriptions
 2. **设置 → 订阅**：点击对应 provider 的「连接」。
    - **Claude**：自动从 Claude Code 导入凭据（需先运行 `claude` 并登录）。
    - **Codex / Grok / OpenRouter**：在新标签页中完成 OAuth 授权。
-   - **Antigravity / GLM / Spark / ERNIE**：先设置环境变量，再在标签页中完成授权。
-   - **Agnes AI**：浏览器授权后，手动粘贴回调 URL 或授权码（DSH 无法自动捕获 `agnes://` 协议）。
+    - **Antigravity**：无需环境变量，直接在标签页中完成授权；可选通过 `ANTIGRAVITY_CLIENT_ID` / `ANTIGRAVITY_CLIENT_SECRET` 覆盖凭据。
+    - **Qwen Code**：通过 `chat.qwen.ai` Device-flow OAuth 授权；无需 API Key 或环境变量，点击「连接」即完成登录。
+    - **Spark / ERNIE**：先设置环境变量，再在标签页中完成授权。
+    - **Agnes AI**：浏览器授权后，手动粘贴回调 URL 或授权码（DSH 无法自动捕获 `agnes://` 协议）。
 3. 在任意会话中打开模型选择器（`/model`），选择对应 provider 下的模型。
 
 未登录时：该 provider 不出现在选择器里；直接请求会报 `MISSING_CREDENTIAL`，不影响其他功能。
 
 ## 环境变量
 
-启动 DSH 前需设置（Antigravity 及国内提供商需要）：
+Antigravity 和 Qwen 使用插件内嵌的公开客户凭据，无需手动配置。仅星火和文心一言需要环境变量：
 
 ```bash
-# Google Antigravity
-export ANTIGRAVITY_CLIENT_ID="your-google-oauth-client-id"
-export ANTIGRAVITY_CLIENT_SECRET="your-google-oauth-client-secret"
-
-# 智谱 GLM（在 https://open.bigmodel.cn 注册应用）
-export GLM_CLIENT_ID="your-glm-client-id"
-export GLM_CLIENT_SECRET="your-glm-client-secret"
+# 可选：覆盖内置的 Antigravity OAuth 客户端凭据
+export ANTIGRAVITY_CLIENT_ID="your-custom-oauth-client-id"
+export ANTIGRAVITY_CLIENT_SECRET="your-custom-oauth-client-secret"
 
 # 讯飞星火（在 https://console.xfyun.cn 注册应用）
 export SPARK_CLIENT_ID="your-spark-client-id"
@@ -74,7 +72,7 @@ export ERNIE_CLIENT_ID="your-ernie-client-id"
 export ERNIE_CLIENT_SECRET="your-ernie-client-secret"
 ```
 
-凭据在运行时读取，插件代码中无硬编码 secret。
+星火、ERNIE 需要在对应平台注册 OAuth 应用并设置环境变量。Qwen 和 Antigravity 点击连接即可直接登录。
 
 ## 配置
 
