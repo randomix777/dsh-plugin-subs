@@ -1,47 +1,48 @@
-﻿{
-    "version":  "1.1.2",
-    "name":  "dsh-plugin-subscriptions",
-    "dsh":  {
-                "bundle":  {
-                                "patch":  "./cordis.patch.yml"
-                            },
-                "client":  {
-                                "platform":  "web"
-                            },
-                "id":  "llm-subscriptions",
-                "changelog":  {
-                                  "1.0.0":  "Initial release with Claude, Codex, Grok",
-                                  "1.1.0":  "Add Google Antigravity provider; mark remaining providers as coming soon",
-                                  "1.1.1":  "Add OpenRouter provider (OAuth PKCE to API key)",
-                                  "1.1.2":  "Add Agnes AI provider (reverse-engineered OAuth from AgnesCode)"
-                               },
-                "version":  "1.1.2",
-                "author":  "DSH Community",
-                "name":  "dsh-plugin-subscriptions",
-                "keywords":  [
-                                  "ai",
-                                  "llm",
-                                  "oauth",
-                                  "claude",
-                                  "codex",
-                                  "grok",
-                                  "antigravity",
-                                  "openrouter",
-                                  "agnes"
-                              ],
-                "categories":  [
-                                    "ai",
-                                    "productivity"
-                                ],
-                "icons":  {
-                               "square":  "https://raw.githubusercontent.com/randomix777/dsh-plugin-subscriptions/main/assets/icon.png"
-                           },
-                "license":  "MIT"
-            },
-    "description":  "DSH plugin with OAuth AI providers: Claude, Codex, Grok, Google Antigravity, OpenRouter, Agnes AI (live); more providers coming soon",
-    "scripts":  {
-                    "build":  "echo 'Build complete'"
-                },
-    "type":  "module",
-    "main":  "lib/index.js"
+{
+    "version": "1.1.3",
+    "name": "dsh-plugin-subscriptions",
+    "dsh": {
+        "bundle": {
+            "patch": "./cordis.patch.yml"
+        },
+        "client": {
+            "platform": "web"
+        },
+        "id": "llm-subscriptions",
+        "changelog": {
+            "1.0.0": "Initial release with Claude, Codex, Grok",
+            "1.1.0": "Add Google Antigravity provider; mark remaining providers as coming soon",
+            "1.1.1": "Add OpenRouter provider (OAuth PKCE to API key)",
+            "1.1.2": "Add Agnes AI provider (reverse-engineered OAuth from AgnesCode)",
+            "1.1.3": "README cleanup and topic expansion"
+        },
+        "version": "1.1.3",
+        "author": "DSH Community",
+        "name": "dsh-plugin-subscriptions",
+        "keywords": [
+            "ai",
+            "llm",
+            "oauth",
+            "claude",
+            "codex",
+            "grok",
+            "antigravity",
+            "openrouter",
+            "agnes"
+        ],
+        "categories": [
+            "ai",
+            "productivity"
+        ],
+        "icons": {
+            "square": "https://raw.githubusercontent.com/randomix777/dsh-plugin-subscriptions/main/assets/icon.png"
+        },
+        "license": "MIT"
+    },
+    "description": "DSH plugin with OAuth AI providers: Claude, Codex, Grok, Google Antigravity, OpenRouter, Agnes AI (live); more providers coming soon",
+    "scripts": {
+        "build": "echo 'Build complete'"
+    },
+    "type": "module",
+    "main": "lib/index.js"
 }
