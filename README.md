@@ -14,6 +14,9 @@ AI LLM plugin for DeepSeek Harness that signs in to consumer AI subscriptions wi
 | **Google Antigravity** | Google One AI Premium | Static catalog (Gemini 3 Pro / 3.1 Pro / 3 Flash, Claude 4.6 Sonnet / Opus); requires env vars (see below) |
 | **OpenRouter** | OpenRouter account | OAuth PKCE → permanent API key; static catalog (GPT-4o, Claude Sonnet/Haiku 4.5, Gemini 2.5 Flash) |
 | **Agnes AI** | AgnesCode account | OAuth PKCE → access token (reverse-engineered); static catalog (Agnes 2.5/2.0 Flash, GPT-4o, Claude Sonnet 4.5 via AgnesCode) |
+| **Zhipu GLM** | GLM API subscription | OAuth PKCE via `open.bigmodel.cn`; env vars: `GLM_CLIENT_ID`, `GLM_CLIENT_SECRET` |
+| **iFlytek Spark** | Spark API subscription | OAuth PKCE via `spark-api.xf-yun.com`; env vars: `SPARK_CLIENT_ID`, `SPARK_CLIENT_SECRET` |
+| **Baidu ERNIE** | ERNIE Bot subscription | OAuth PKCE via `openapi.baidu.com`; env vars: `ERNIE_CLIENT_ID`, `ERNIE_CLIENT_SECRET` |
 
 ### Coming soon
 
@@ -43,7 +46,7 @@ dsh plugin --profile web add github:randomix777/dsh-plugin-subscriptions
 2. Go to **Settings → Subscriptions** and press **Connect** next to a provider.
 3. Complete the OAuth flow in the browser tab that opens. On headless setups, paste the callback URL or authorization code manually.
    - **Claude**: imports from existing Claude Code credentials (run `claude` once if not logged in).
-   - **Antigravity**: set env vars first (see below), then complete OAuth in the browser.
+   - **Antigravity / GLM / Spark / ERNIE**: set env vars first (see below), then complete OAuth in the browser.
    - **Agnes AI**: after browser authorization, paste the full callback URL (or just the auth code) into the DSH UI — the `agnes://` deep link cannot be auto-captured by DSH.
 4. In any chat, open the model selector (`/model`) and pick a model under the desired provider.
 
@@ -51,14 +54,27 @@ Untreated providers show no card in the model picker until signed in.
 
 ## Environment Variables
 
-Set these before launching DSH for Antigravity:
+Set these before launching DSH:
 
 ```bash
+# Google Antigravity
 export ANTIGRAVITY_CLIENT_ID="your-google-oauth-client-id"
 export ANTIGRAVITY_CLIENT_SECRET="your-google-oauth-client-secret"
+
+# Zhipu GLM (register at https://open.bigmodel.cn)
+export GLM_CLIENT_ID="your-glm-client-id"
+export GLM_CLIENT_SECRET="your-glm-client-secret"
+
+# iFlytek Spark (register at https://console.xfyun.cn)
+export SPARK_CLIENT_ID="your-spark-client-id"
+export SPARK_CLIENT_SECRET="your-spark-client-secret"
+
+# Baidu ERNIE (register at https://console.bce.baidu.com/ai/)
+export ERNIE_CLIENT_ID="your-ernie-client-id"
+export ERNIE_CLIENT_SECRET="your-ernie-client-secret"
 ```
 
-These are read from the environment at runtime — no hardcoded secrets in the plugin.
+All credentials are read from the environment at runtime — no hardcoded secrets in the plugin.
 
 ## Configuration
 
@@ -67,7 +83,7 @@ providers:
   - id: llm-subscriptions
     name: dsh-plugin-subscriptions
     config:
-      providers: [codex, claude, grok, antigravity, openrouter, agnes]  # subset allowed; all six enabled by default
+      providers: [codex, claude, grok, antigravity, openrouter, agnes, glm, spark, ernie]  # subset allowed; all nine enabled by default
       streamIdleTimeoutMs: 300000
       models:  # override built-in catalogs
         codex:
@@ -89,6 +105,7 @@ Auto-registered when the corresponding provider is active:
 - `x_search` requires Grok login and an API-capable subscription tier
 - OpenRouter API key is permanent (no refresh); log out and re-login to replace
 - Agnes AI requires manual callback URL/code paste (no `agnes://` protocol handler in DSH)
+- Chinese providers (GLM, Spark, ERNIE) require a registered OAuth app on the respective platform and env var credentials
 
 ## Project Structure
 

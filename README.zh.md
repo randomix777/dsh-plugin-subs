@@ -1,6 +1,6 @@
 # DSH 插件订阅
 
-DeepSeek Harness 的 AI LLM 插件，通过 OAuth 登录消费级 AI 订阅并将其作为 LLM 提供商暴露。
+DeepSeek Harness 的 AI LLM 插件，通过 OAuth 登录订阅制 LLM 提供商并将其作为 LLM 提供商暴露。
 
 ## 功能
 
@@ -21,7 +21,10 @@ DeepSeek Harness 的 AI LLM 插件，通过 OAuth 登录消费级 AI 订阅并�
 | `grok` | X Premium/Premium+ | 实时获取模型列表；含 `x_search`、`image_generate`、`video_generate` 工具 |
 | `antigravity` | Google One AI Premium / Antigravity | 静态目录（Gemini 3 Pro / 3.1 Pro / 3 Flash、Claude 4.6 Sonnet / Opus）；需设置环境变量 |
 | `openrouter` | OpenRouter (OAuth PKCE) | 登录换取永久 API key；静态目录（GPT-4o / GPT-4o Mini / Claude Sonnet & Haiku 4.5 / Gemini 2.5 Flash） |
-| `agnes` | Agnes AI (OAuth) | OAuth 换取 access token（逆向自 AgnesCode）；静态目录（Agnes 2.5/2.0 Flash、GPT-4o、Claude Sonnet 4.5 via AgnesCode） |
+| `agnes` | Agnes AI (OAuth) | OAuth PKCE 换取 access token（逆向自 AgnesCode）；静态目录（Agnes 2.5/2.0 Flash、GPT-4o、Claude Sonnet 4.5 via AgnesCode） |
+| `glm` | 智谱 GLM | OAuth PKCE via `open.bigmodel.cn`；需设置 `GLM_CLIENT_ID` / `GLM_CLIENT_SECRET` |
+| `spark` | 讯飞星火 | OAuth PKCE via `spark-api.xf-yun.com`；需设置 `SPARK_CLIENT_ID` / `SPARK_CLIENT_SECRET` |
+| `ernie` | 百度文心一言 | OAuth PKCE via `openapi.baidu.com`；需设置 `ERNIE_CLIENT_ID` / `ERNIE_CLIENT_SECRET` |
 
 ### 即将推出
 
@@ -43,7 +46,7 @@ dsh plugin --profile web add github:randomix777/dsh-plugin-subscriptions
 2. **设置 → 订阅**：点击对应 provider 的「连接」。
    - **Claude**：自动从 Claude Code 导入凭据（需先运行 `claude` 并登录）。
    - **Codex / Grok / OpenRouter**：在新标签页中完成 OAuth 授权。
-   - **Antigravity**：先设置环境变量，再在标签页中完成授权。
+   - **Antigravity / GLM / Spark / ERNIE**：先设置环境变量，再在标签页中完成授权。
    - **Agnes AI**：浏览器授权后，手动粘贴回调 URL 或授权码（DSH 无法自动捕获 `agnes://` 协议）。
 3. 在任意会话中打开模型选择器（`/model`），选择对应 provider 下的模型。
 
@@ -51,11 +54,24 @@ dsh plugin --profile web add github:randomix777/dsh-plugin-subscriptions
 
 ## 环境变量
 
-启动 DSH 前需设置（仅 Antigravity 需要）：
+启动 DSH 前需设置（Antigravity 及国内提供商需要）：
 
 ```bash
+# Google Antigravity
 export ANTIGRAVITY_CLIENT_ID="your-google-oauth-client-id"
 export ANTIGRAVITY_CLIENT_SECRET="your-google-oauth-client-secret"
+
+# 智谱 GLM（在 https://open.bigmodel.cn 注册应用）
+export GLM_CLIENT_ID="your-glm-client-id"
+export GLM_CLIENT_SECRET="your-glm-client-secret"
+
+# 讯飞星火（在 https://console.xfyun.cn 注册应用）
+export SPARK_CLIENT_ID="your-spark-client-id"
+export SPARK_CLIENT_SECRET="your-spark-client-secret"
+
+# 百度文心一言（在 https://console.bce.baidu.com/ai/ 注册应用）
+export ERNIE_CLIENT_ID="your-ernie-client-id"
+export ERNIE_CLIENT_SECRET="your-ernie-client-secret"
 ```
 
 凭据在运行时读取，插件代码中无硬编码 secret。
@@ -67,7 +83,7 @@ providers:
   - id: llm-subscriptions
     name: dsh-plugin-subscriptions
     config:
-      providers: [codex, claude, grok, antigravity, openrouter, agnes]   # 子集;默认六个全启用
+      providers: [codex, claude, grok, antigravity, openrouter, agnes, glm, spark, ernie]   # 子集;默认九个全启用
       streamIdleTimeoutMs: 300000
       models:                            # 覆盖实时发现/内置目录
         codex:
@@ -80,7 +96,7 @@ providers:
 
 - **`x_search`**（Grok）—— xAI 托管的 X 搜索，返回 `{ answer, citations }`。
 - **`image_generate`**（ChatGPT 或 Grok）—— 经 Codex 后端调用 `gpt-image-2`，或经 Grok 调用 `grok-imagine-image-2.0`。`provider` 参数指定首选提供方（默认 `gpt`，可选 `grok`）；首选方未登录时自动回退到另一方。图片保存到 `~/.dsh/plugins/subscriptions/images/`。
-- **`video_generate`**（Grok）—— 调用 `grok-imagine-video-1.5`（异步提交 + 轮询）；MP4 保存到 `~/.dsh/plugins/subscriptions/videos/`，视频在对话中内联播放。支持时长（1–15 秒）、宽高比、分辨率及图生视频。
+- **`video_generate`**（Grok）—— 调用 `grok-imagine-video-1.5`（异步提交 + 轮询）；MP4 保存到 `~/.dsh/plugins/subscriptions/videos/`，视频在对话中内联播放。
 
 ## 限制与已知问题
 
@@ -90,6 +106,7 @@ providers:
 - Antigravity 的 Google OAuth 凭据通过环境变量提供（安全考虑，未硬编码）
 - OpenRouter 登录后获得永久 API key，无需刷新
 - Agnes AI 的回调协议 `agnes://` 无法被 DSH 自动捕获，需手动粘贴回调 URL 或授权码
+- 国内提供商（GLM / Spark / ERNIE）需在各自开放平台注册 OAuth 应用并设置环境变量
 
 ## 项目结构
 
