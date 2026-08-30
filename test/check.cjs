@@ -12,9 +12,9 @@ function assert(cond, msg) {
     else { console.log(`  OK  ${msg}`); }
 }
 
-// 1. package.json parseable and version 1.2.1
+// 1. package.json parseable and version 1.2.2
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
-assert(pkg.version === '1.2.1', `package.json version is ${pkg.version}`);
+assert(pkg.version === '1.2.2', `package.json version is ${pkg.version}`);
 assert(Array.isArray(pkg.files), 'package.json has files array');
 const allowed = new Set(['lib', 'lib/', 'cordis.patch.yml', 'README.md', 'README.zh.md', 'LICENSE']);
 for (const f of pkg.files) assert(allowed.has(f), `files entry "${f}" is expected`);
