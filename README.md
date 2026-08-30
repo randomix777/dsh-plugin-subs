@@ -1,4 +1,4 @@
-﻿# DSH Plugin Subscriptions
+# DSH Plugin Subscriptions
 
 AI LLM plugin for DeepSeek Harness that signs in to consumer AI subscriptions with OAuth and exposes them as LLM providers.
 
@@ -80,7 +80,7 @@ providers:
   - id: llm-subscriptions
     name: dsh-plugin-subscriptions
     config:
-      providers: [codex, claude, grok, antigravity, openrouter, agnes, glm, spark, ernie]  # subset allowed; all nine enabled by default
+      providers: [codex, claude, grok, antigravity, openrouter, agnes, qwen, spark, ernie]  # subset allowed; all nine enabled by default
       streamIdleTimeoutMs: 300000
       models:  # override built-in catalogs
         codex:
@@ -102,13 +102,14 @@ Auto-registered when the corresponding provider is active:
 - `x_search` requires Grok login and an API-capable subscription tier
 - OpenRouter API key is permanent (no refresh); log out and re-login to replace
 - Agnes AI requires manual callback URL/code paste (no `agnes://` protocol handler in DSH)
-- Chinese providers (GLM, Spark, ERNIE) require a registered OAuth app on the respective platform and env var credentials
+- Chinese providers (Spark, ERNIE) require a registered OAuth app on the respective platform and env var credentials
+- Qwen Code uses device-flow OAuth: enter the user code at the verification URL in any browser; the flow is cancellable and expires after `expires_in` seconds
 
 ## Project Structure
 
 - `lib/index.js` — Main bundle (compiled output), all backend logic
 - `lib/client.js` — Browser bundle, UI components
-- `src/providers/` — Source for each provider's OAuth flow, token exchange, and `LlmAdapter`
+- `lib/client/*.js` — Split client source files (locales, UI components)
 
 ## License
 

@@ -81,7 +81,7 @@ providers:
   - id: llm-subscriptions
     name: dsh-plugin-subscriptions
     config:
-      providers: [codex, claude, grok, antigravity, openrouter, agnes, glm, spark, ernie]   # 子集;默认九个全启用
+      providers: [codex, claude, grok, antigravity, openrouter, agnes, qwen, spark, ernie]   # 子集;默认九个全启用
       streamIdleTimeoutMs: 300000
       models:                            # 覆盖实时发现/内置目录
         codex:
@@ -104,13 +104,14 @@ providers:
 - Antigravity 的 Google OAuth 凭据通过环境变量提供（安全考虑，未硬编码）
 - OpenRouter 登录后获得永久 API key，无需刷新
 - Agnes AI 的回调协议 `agnes://` 无法被 DSH 自动捕获，需手动粘贴回调 URL 或授权码
-- 国内提供商（GLM / Spark / ERNIE）需在各自开放平台注册 OAuth 应用并设置环境变量
+- 国内提供商（Spark / ERNIE）需在各自开放平台注册 OAuth 应用并设置环境变量
+- Qwen Code 使用 Device-flow OAuth：在任何浏览器中打开验证 URL 并输入验证码；流程可取消，过期时间为 `expires_in` 秒
 
 ## 项目结构
 
 - `lib/index.js` — 主 bundle（编译产物），所有后端逻辑
 - `lib/client.js` — 浏览器 bundle，UI 组件
-- `src/providers/` — 各 provider 的 OAuth 流程/交换/适配器源码
+- `lib/client/*.js` — 拆分客户端源码（国际化、UI 组件）
 
 ## License
 
