@@ -53,7 +53,7 @@
         "productivity"
     ],
     "icons": {
-        "square": "https://raw.githubusercontent.com/randomix777/dsh-plugin-subscriptions/main/assets/icon.png"
+        "square": "https://raw.githubusercontent.com/randomix777/dsh-plugin-subs/main/assets/icon.png"
     },
     "license": "MIT"
 }
