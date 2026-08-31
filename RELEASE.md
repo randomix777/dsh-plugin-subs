@@ -4,7 +4,7 @@
 
 | 属性 | 值 |
 |------|-----|
-| 名称 | dsh-plugin-subscriptions |
+| 名称 | dsh-plugin-subs |
 | 版本 | 1.1.2 |
 | 描述 | DSH plugin with OAuth AI providers (Claude, Codex, Grok, Antigravity, OpenRouter, Agnes AI) |
 | 许可证 | MIT |
@@ -29,7 +29,7 @@ gemini, perplexity, github-copilot, mistral, cursor, huggingface, windsurf, repl
 ### 1. 推送到 GitHub
 
 ```bash
-cd D:\Projects\plugins\dsh-plugin-subscriptions
+cd D:\Projects\plugins\dsh-plugin-subs
 git push origin main
 ```
 
@@ -42,7 +42,7 @@ gh release create v1.1.2 --title "v1.1.2 - Add OpenRouter & Agnes AI" --notes "S
 ### 3. 提交到 DSH Market
 
 在 [DSH Market](https://dsh.ai) 提交插件:
-- 仓库地址: `https://github.com/randomix777/dsh-plugin-subscriptions`
+- 仓库地址: `https://github.com/randomix777/dsh-plugin-subs`
 - 版本: 1.1.2
 - 参考 `DSH_MARKET_RELEASE.md`
 
