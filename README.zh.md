@@ -34,10 +34,10 @@ Gemini、Perplexity AI、GitHub Copilot、Mistral AI、Cursor、Hugging Face、W
 
 ```bash
 # 从 npm 安装（预构建，无需编译）
-dsh plugin --profile web add dsh-plugin-subscriptions
+dsh plugin --profile web add dsh-plugin-subs
 
 # 或从 GitHub 源码安装
-dsh plugin --profile web add github:randomix777/dsh-plugin-subscriptions
+dsh plugin --profile web add github:randomix777/dsh-plugin-subs
 ```
 
 ## 使用步骤
@@ -79,7 +79,7 @@ export ERNIE_CLIENT_SECRET="your-ernie-client-secret"
 ```yaml
 providers:
   - id: llm-subscriptions
-    name: dsh-plugin-subscriptions
+    name: dsh-plugin-subs
     config:
       providers: [codex, claude, grok, antigravity, openrouter, agnes, qwen, spark, ernie]   # 子集;默认九个全启用
       streamIdleTimeoutMs: 300000

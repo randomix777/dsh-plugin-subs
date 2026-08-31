@@ -1,6 +1,6 @@
 {
     "version": "1.2.2",
-    "name": "dsh-plugin-subscriptions",
+    "name": "dsh-plugin-subs",
     "dsh": {
         "bundle": {
             "patch": "./cordis.patch.yml"

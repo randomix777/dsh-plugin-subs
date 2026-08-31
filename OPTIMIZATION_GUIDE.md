@@ -1,4 +1,4 @@
-﻿# dsh-plugin-subscriptions 优化指南
+﻿# dsh-plugin-subs 优化指南
 
 ## 当前状态
 
@@ -42,7 +42,7 @@
 2. 配置: 插件的 `config`(`providers` 子集、`models` 覆盖、`streamIdleTimeoutMs`)
 3. 测试: `pnpm test`
 4. 打包: `pnpm build`
-5. 部署: `dsh plugin --profile web add dsh-plugin-subscriptions`
+5. 部署: `dsh plugin --profile web add dsh-plugin-subs`
 
 ## 修改建议
 

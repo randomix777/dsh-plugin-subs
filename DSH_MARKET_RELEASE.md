@@ -4,9 +4,9 @@
 
 | 字段 | 值 |
 |------|-----|
-| 插件名称 | dsh-plugin-subscriptions |
+| 插件名称 | dsh-plugin-subs |
 | 版本 | 1.1.2 |
-| 仓库地址 | https://github.com/randomix777/dsh-plugin-subscriptions |
+| 仓库地址 | https://github.com/randomix777/dsh-plugin-subs |
 | 描述 | DSH plugin with OAuth AI providers (Claude, Codex, Grok, Antigravity, OpenRouter, Agnes AI) |
 
 ## 提供商列表
@@ -28,7 +28,7 @@
 
 ```
 DSH Settings > Plugins > Install from GitHub
-输入: https://github.com/randomix777/dsh-plugin-subscriptions
+输入: https://github.com/randomix777/dsh-plugin-subs
 ```
 
 ## 认证方式

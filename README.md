@@ -34,10 +34,10 @@ Gemini, Perplexity AI, GitHub Copilot, Mistral AI, Cursor, Hugging Face, Windsur
 
 ```bash
 # From npm (pre-built, no build step)
-dsh plugin --profile web add dsh-plugin-subscriptions
+dsh plugin --profile web add dsh-plugin-subs
 
 # Or from GitHub source
-dsh plugin --profile web add github:randomix777/dsh-plugin-subscriptions
+dsh plugin --profile web add github:randomix777/dsh-plugin-subs
 ```
 
 ## Usage
@@ -78,7 +78,7 @@ Spark and ERNIE require you to register an OAuth app on the respective platform 
 ```yaml
 providers:
   - id: llm-subscriptions
-    name: dsh-plugin-subscriptions
+    name: dsh-plugin-subs
     config:
       providers: [codex, claude, grok, antigravity, openrouter, agnes, qwen, spark, ernie]  # subset allowed; all nine enabled by default
       streamIdleTimeoutMs: 300000
